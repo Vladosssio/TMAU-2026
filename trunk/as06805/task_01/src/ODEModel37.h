@@ -1,26 +1,30 @@
 #pragma once
+
 #include "Model.h"
 #include <cmath>
 
 class ODEModel37 : public Model {
+private:
+    double a_;
+    double b_;
+    double dt_;
+    double yCurr_;
+
 public:
     ODEModel37(double a, double b, double dt)
-        : a_(a), b_(b), dt_(dt) {
-        reset();
-    }
-
-    void reset() override { y_ = 0.0; }
+        : a_(a), b_(b), dt_(dt), yCurr_(0.0) {}
 
     double step(double u) override {
-        // dy/dt = -exp(a)*y + b*u (метод Эйлера)
-        double dy = -std::exp(a_) * y_ + b_ * u;
-        y_ = y_ + dt_ * dy;
-        return y_;
+        double dy = -std::exp(a_) * yCurr_ + b_ * u;
+        yCurr_ += dt_ * dy;
+        return yCurr_;
     }
 
-    const char* name() const override { return "Model 3.7 (ODE Exponential, Euler)"; }
+    void reset() override {
+        yCurr_ = 0.0;
+    }
 
-private:
-    double a_, b_, dt_;
-    double y_ = 0.0;
+    std::string name() const override {
+        return "Model 3.7 (ODE, Euler)";
+    }
 };

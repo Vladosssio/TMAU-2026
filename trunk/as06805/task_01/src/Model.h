@@ -1,15 +1,14 @@
 #pragma once
-#include <vector>
+
+#include <string>
 
 class Model {
 public:
-    virtual ~Model() = default;
-    // следующий шаг модели
+    virtual ~Model() {
+        // Явное пустое тело виртуального деструктора для SonarQube
+    }
+
     virtual double step(double u) = 0;
-
     virtual void reset() = 0;
-
-    virtual const char* name() const = 0;
-    // установка начальных условий
-    virtual void setInitialState(const std::vector<double>& init) {}
+    virtual std::string name() const = 0;
 };
