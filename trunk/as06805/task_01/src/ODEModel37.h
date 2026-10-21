@@ -8,11 +8,11 @@ private:
     double a_;
     double b_;
     double dt_;
-    double yCurr_;
+    double yCurr_{0.0};
 
 public:
     ODEModel37(double a, double b, double dt)
-        : a_(a), b_(b), dt_(dt), yCurr_(0.0) {}
+        : a_(a), b_(b), dt_(dt) {}
 
     double step(double u) override {
         double dy = -std::exp(a_) * yCurr_ + b_ * u;

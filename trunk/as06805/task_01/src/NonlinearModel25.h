@@ -7,14 +7,20 @@ class NonlinearModel25 : public Model {
 private:
     double a_;
     double b_;
-    double yCurr_;
+    double yCurr_{0.0};
 
 public:
     NonlinearModel25(double a, double b)
-        : a_(a), b_(b), yCurr_(0.0) {}
+        : a_(a), b_(b) {}
 
     double step(double u) override {
-        double signU = (u > 0) ? 1.0 : ((u < 0) ? -1.0 : 0.0);
+        double signU = 0.0;
+        if (u > 0.0) {
+            signU = 1.0;
+        } else if (u < 0.0) {
+            signU = -1.0;
+        }
+
         double nonlin = signU * (1.0 - std::exp(-std::abs(u)));
         yCurr_ = a_ * yCurr_ + b_ * nonlin;
         return yCurr_;
