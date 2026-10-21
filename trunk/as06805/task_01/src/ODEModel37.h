@@ -8,7 +8,7 @@ private:
     double a_;
     double b_;
     double dt_;
-    double yCurr_{0.0};
+    double yCurr_ = 0.0;
 
 public:
     ODEModel37(double a, double b, double dt)

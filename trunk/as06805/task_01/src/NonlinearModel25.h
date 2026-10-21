@@ -7,7 +7,7 @@ class NonlinearModel25 : public Model {
 private:
     double a_;
     double b_;
-    double yCurr_{0.0};
+    double yCurr_ = 0.0;
 
 public:
     NonlinearModel25(double a, double b)
