@@ -4,9 +4,7 @@
 
 class Model {
 public:
-    virtual ~Model() {
-        // Явное пустое тело виртуального деструктора для SonarQube
-    }
+    virtual ~Model() = default;
 
     virtual double step(double u) = 0;
     virtual void reset() = 0;
