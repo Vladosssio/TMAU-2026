@@ -1,11 +1,13 @@
 import os
 import matplotlib.pyplot as plt
 
+RESULTS_FILE = "results.txt"
+
 possible_paths = [
-    os.path.join("build", "src", "Debug", "results.txt"),
-    os.path.join("build", "src", "Release", "results.txt"),
-    os.path.join("build", "results.txt"),
-    "results.txt"
+    os.path.join("build", "src", "Debug", RESULTS_FILE),
+    os.path.join("build", "src", "Release", RESULTS_FILE),
+    os.path.join("build", RESULTS_FILE),
+    RESULTS_FILE
 ]
 
 file_path = None
@@ -50,7 +52,6 @@ if file_path:
             if not os.path.exists(doc_dir):
                 os.makedirs(doc_dir)
             
-            # Сохраняем ровно под тем именем, которое требуется для отчета
             output_name = f"{model_name}_{signal_name}.png"
             output_img = os.path.join(doc_dir, output_name)
             plt.savefig(output_img)
@@ -62,4 +63,4 @@ if file_path:
     except Exception as e:
         print(f"[Ошибка] Ошибка при чтении файла: {e}")
 else:
-    print("[Ошибка] Файл результатов results.txt не найден!")
+    print("[Ошибка] Файл результатов не найден!")

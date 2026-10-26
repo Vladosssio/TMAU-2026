@@ -15,19 +15,22 @@
 #include "SignalGenerator.h"
 #include "Simulator.h"
 
+// Парсит строку в double без глубокой вложенности
+bool tryParseDouble(std::string input, double& outValue) {
+    for (char& c : input) {
+        if (c == ',') c = '.';
+    }
+    std::stringstream ss(input);
+    return (ss >> outValue) && ss.eof();
+}
+
 double getValidDouble(const std::string& prompt) {
     double value;
     std::string input;
     while (true) {
         std::cout << prompt;
-        if (std::cin >> input) {
-            for (char& c : input) {
-                if (c == ',') c = '.';
-            }
-            std::stringstream ss(input);
-            if (ss >> value && ss.eof()) {
-                return value;
-            }
+        if (std::cin >> input && tryParseDouble(input, value)) {
+            return value;
         }
         std::cout << " Ошибка: введите корректное число (например, 0.8 или -0.2).\n";
         std::cin.clear();
@@ -39,16 +42,12 @@ int getValidInt(const std::string& prompt, int min_val = 1, int max_val = 10000)
     int value;
     while (true) {
         std::cout << prompt;
-        if (std::cin >> value) {
-            if (value >= min_val && value <= max_val) {
-                return value;
-            }
-            std::cout << " Ошибка: значение должно быть от " << min_val << " до " << max_val << ".\n";
-        } else {
-            std::cout << " Ошибка: введите целое число.\n";
-            std::cin.clear();
-            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+        if (std::cin >> value && value >= min_val && value <= max_val) {
+            return value;
         }
+        std::cout << " Ошибка: введите целое число от " << min_val << " до " << max_val << ".\n";
+        std::cin.clear();
+        std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
     }
 }
 
@@ -115,15 +114,12 @@ int main() {
     simulator.printTable(results, signalGen);
     simulator.exportCSV(results, signalGen, "results.csv");
 
-    std::ofstream fout("results.txt");
-    if (fout.is_open()) {
-        // Записываем заголовок с названием модели и сигнала
+    if (std::ofstream fout("results.txt"); fout.is_open()) {
         fout << "# " << modelName << "|" << signalName << "\n";
         for (size_t i = 0; i < results.size(); ++i) {
             double uVal = signalGen.get(static_cast<double>(i));
             fout << i << " " << uVal << " " << results[i] << "\n";
         }
-        fout.close();
     }
 
     std::cout << "\n[Инфо] Результаты сохранены в results.csv и results.txt\n";
