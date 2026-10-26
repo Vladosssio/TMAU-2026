@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 > nul
 echo ===================================
 echo Building Project for Task 01...
 echo ===================================
@@ -24,7 +25,20 @@ echo ===================================
 echo Build Successful! Running program...
 echo ===================================
 
-Debug\task_01.exe || task_01.exe
+if exist "src\Debug\task_01.exe" (
+    src\Debug\task_01.exe
+) else if exist "src\Release\task_01.exe" (
+    src\Release\task_01.exe
+) else if exist "Debug\task_01.exe" (
+    Debug\task_01.exe
+) else (
+    task_01.exe
+)
 
+echo ===================================
+echo Generating Plot...
+echo ===================================
 cd ..
+python plot_results.py
+
 pause
